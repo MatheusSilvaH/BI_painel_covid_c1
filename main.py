@@ -17,7 +17,8 @@ def gera_df_filtrado():
 
     # Remove as linhas em que nao possui tabagismo como comorbidade
     df.drop(df[df.ComorbidadeTabagismo != 'Sim'].index, inplace=True)
-
+    
+    # Remove as linh em que o óbito não foi causado pelo COVID-19
     df.drop(df[df.Evolucao != 'Óbito pelo COVID-19'].index, inplace=True)
 
     #reseta o index do dataframe
