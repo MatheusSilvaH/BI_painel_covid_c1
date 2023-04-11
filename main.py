@@ -1,30 +1,28 @@
-import pandas as pd
+from logging import info
 
-def gera_df_filtrado():
-    caminho = r'.\MICRODADOS.csv'
+from src.steps.baixa_relatorio_microdados import baixa_dataset
+from src.steps.database import insere_fato_mortes, insere_dimensoes
+from src.steps.dataset import gera_df_filtrado
 
-    # Gera o DataFrame com base no .csv
-    df = pd.DataFrame(pd.read_csv(caminho, sep=";", encoding="ISO-8859-1", low_memory=False))
 
-    # Remove todas as linhas em que o municipio seja diferente de CARIACICA
-    df.drop(df[df.Municipio != 'CARIACICA'].index, inplace=True)
+def main():
+    try:
+        baixa_dataset()
+    except Exception as erro_dataset:
+        info(f'Erro ao fazer o download do arquivo CSV. Erro: {erro_dataset}')
 
-    # Substitui os valores NaN por uma string vazia
-    df.fillna(value='', inplace=True)
+    try:
+        pass
+        gera_df_filtrado()
+    except Exception as erro_df:
+        info(f'Erro ao filtrar o DataFrame. Erro: {erro_df}')
 
-    # Remove as linhas que nao possuem data de obito
-    df.drop(df[df.DataObito == ''].index, inplace=True)
+    try:
+        insere_fato_mortes()
+        insere_dimensoes()
+    except Exception as erro_dw:
+        info(f'Erro ao inserir dados da tabela fato no banco. Erro: {erro_dw}')
 
-    # Remove as linhas em que nao possui tabagismo como comorbidade
-    df.drop(df[df.ComorbidadeTabagismo != 'Sim'].index, inplace=True)
-    
-    # Remove as linh em que o óbito não foi causado pelo COVID-19
-    df.drop(df[df.Evolucao != 'Óbito pelo COVID-19'].index, inplace=True)
 
-    #reseta o index do dataframe
-    df.reset_index(drop=True, inplace=True)
-
-    df.to_excel(r'.\teste.xlsx')
-    return df
-
-gera_df_filtrado()
+if __name__ == '__main__':
+    main()
