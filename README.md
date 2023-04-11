@@ -8,3 +8,5 @@ O arquivo baixa_relatorio_microdados.py é a etapa onde é feioto o download do 
 O arquivo dataset.py é onde são manilulados os DataFrames para a obtenção das tabelas fato e da tabela dimensão. Nele há a variavel caminho que deve ser ajustada com o caminho onde o arquivo MICRODADOS.csv é baixado na su amaquina
 
 O arquivo database.py contém os scripts para enviar os datasets ao banco de dados, o banco escolhido é o PostgreSQL e nesse arquivo contém a variavel engine que deve ser configurada conforme os seus dados do banco. com a utilização do metodo to_sql() não é necessário um script de criação de tabelas. 
+
+O arquivo main.py é o arquivo que deve ser executado para rodar o processo por completo.
